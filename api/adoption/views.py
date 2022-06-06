@@ -18,6 +18,6 @@ class AdoptionList(APIView):
         return Response(
             {
                 'errors': serializer.errors,
-                'message': 'Houveram erros de validação'
+                'message': 'Erro de validação dos dados.'
             },
             status = HTTP_400_BAD_REQUEST)

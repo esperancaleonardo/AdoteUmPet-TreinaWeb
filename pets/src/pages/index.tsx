@@ -14,10 +14,12 @@ import List from '../ui/components/List/List'
 import { Pet } from '../data/@types/pet'
 
 import { ApiService } from '../data/services/ApiService'
+import { AxiosError } from 'axios'
 
 const Home: NextPage = () => {
   const [modalOpen, setModalOpen] = useState<Pet | null>(null)
   const [modalSent, setModalSent] = useState(false)
+  const [feedbackMessage, setFeedbackMessage] = useState('')
   const [email, setEmail] = useState('')
   const [value, setValue] = useState('')
   const [petsList, setPetsList] = useState<Pet[]>([])
@@ -31,9 +33,40 @@ const Home: NextPage = () => {
   }, [])
 
   function adopt() {
-    setModalOpen(null)
-    setModalSent(true)
-    console.log('ADOTADO')
+    if (modalOpen !== null) {
+      if (validadeForm()) {
+        ApiService.post('/adoption', {
+          pet_id: modalOpen.id,
+          email: email,
+          value: value
+        })
+          .then(() => {
+            setModalOpen(null)
+            setModalSent(true)
+            setEmail('')
+            setValue('')
+            setFeedbackMessage('Adoção efetuada com sucesso, obrigado!!')
+          })
+          .catch((error: AxiosError) => {
+            setFeedbackMessage(
+              error.response?.data.message +
+                ' ' +
+                (error.response?.data.errors.email ||
+                  error.response?.data.errors.value)
+            )
+            setModalSent(true)
+          })
+      } else {
+        setFeedbackMessage(
+          'Ocorreu um erro. Preencha todos os campos os campos e tente novamente.'
+        )
+        setModalSent(true)
+      }
+    }
+  }
+
+  function validadeForm() {
+    return email.length > 0 && value.length > 0
   }
 
   return (
@@ -95,7 +128,7 @@ const Home: NextPage = () => {
 
       <Snackbar
         open={modalSent}
-        message={'Adoção efetuada com sucesso!'}
+        message={feedbackMessage}
         autoHideDuration={1500}
         onClose={() => setModalSent(false)}
       />
