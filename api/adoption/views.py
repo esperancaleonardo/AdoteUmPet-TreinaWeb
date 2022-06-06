@@ -15,4 +15,9 @@ class AdoptionList(APIView):
             serializer.save()
             return Response(serializer.data, status = HTTP_201_CREATED)
 
-        return Response(serializer.errors, status = HTTP_400_BAD_REQUEST)
+        return Response(
+            {
+                'errors': serializer.errors,
+                'message': 'Houveram erros de validação'
+            },
+            status = HTTP_400_BAD_REQUEST)
