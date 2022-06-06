@@ -13,14 +13,15 @@ import { TextService } from '../../../data/services/TextService'
 
 interface ListProps {
   pets: Pet[]
+  onSelect: (pet: Pet) => void
 }
 
-export default function List({ pets }: ListProps) {
+export default function List(props: ListProps) {
   const maxLen = process.env.NEXT_PUBLIC_MAX_LEN_DESCRIPTION
 
   return (
     <ListStyled>
-      {pets.map(pet => (
+      {props.pets.map(pet => (
         <ListItemStyled key={pet.id}>
           <ItemPicStyled src={pet.image} />
           <ItemInfoStyled>
@@ -28,7 +29,11 @@ export default function List({ pets }: ListProps) {
             <InfoDescStyled>
               {TextService.cropAndLimitText(pet.description, maxLen)}
             </InfoDescStyled>
-            <Button fullWidth variant={'contained'}>
+            <Button
+              fullWidth
+              variant={'contained'}
+              onClick={() => props.onSelect(pet)}
+            >
               Adotar o {pet.name}
             </Button>
           </ItemInfoStyled>
