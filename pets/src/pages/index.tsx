@@ -48,12 +48,17 @@ const Home: NextPage = () => {
             setFeedbackMessage('Adoção efetuada com sucesso, obrigado!!')
           })
           .catch((error: AxiosError) => {
-            setFeedbackMessage(
-              error.response?.data.message +
-                ' ' +
-                (error.response?.data.errors.email ||
-                  error.response?.data.errors.value)
-            )
+            const data = error.response.data
+            if (data.errors.email != null && data.errors.email.length !== 0) {
+              setFeedbackMessage(data.message + ' ' + data.errors.email[0])
+            } else if (
+              data.errors.value != null &&
+              data.errors.value.length !== 0
+            ) {
+              setFeedbackMessage(data.message + ' ' + data.errors.value[0])
+            } else {
+              setFeedbackMessage(data.message)
+            }
             setModalSent(true)
           })
       } else {
