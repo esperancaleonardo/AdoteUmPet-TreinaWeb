@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 
 import Title from '../ui/components/Title/Title'
 import List from '../ui/components/List/List'
+import Footer from '../ui/components/Footer/Footer'
 import { Pet } from '../data/@types/pet'
 
 import { ApiService } from '../data/services/ApiService'
@@ -77,7 +78,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Title
-        TitleText=""
+        TitleText={'SUA MÃE NÃO TE DEIXA TER UM PET EM CASA??'}
         SubtitleText={
           <span>
             Com um pequeno valor mensal, você pode{' '}
@@ -86,6 +87,8 @@ const Home: NextPage = () => {
         }
       />
       <List pets={petsList} onSelect={pet => setModalOpen(pet)} />
+
+      <Footer />
 
       <Dialog
         open={modalOpen !== null}
