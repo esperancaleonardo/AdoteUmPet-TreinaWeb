@@ -26,9 +26,9 @@ class AdoptionSerializer(serializers.ModelSerializer):
                 "O valor de doação deve ser maior que R$10,00"
             )
 
-        if value > 150:
+        if value > 300:
             raise serializers.ValidationError(
-                "O valor de doação deve ser menor que R$150,00"
+                "O valor de doação deve ser menor que R$300,00"
             )
 
         return value
